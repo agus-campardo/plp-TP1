@@ -115,21 +115,28 @@ hayCaminoIluminado =
             cajaOn
 -}
 
-{-
+-- CONSIDERÉ QU EL CAMINO ES SOLO DE PRENDIDAS
+-- PREGUNTAR A QUÉ SE CONSIDERA CAMINO 
 hayCaminoIluminado :: Circuito -> Bool 
 hayCaminoIluminado = 
-  recCicuito 
+  recCircuito 
     (\caja -> caja == on)
-    (\_ recCi recCd _ -> recCi && recCd)
+    (\_ recCi _recCd -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
       if apagadaOVacia ce || apagadaOVacia cs then False else 
       puedoContinuarCamino ci recCi || puedoContinuarCamino cd recCd)
 
     where
-      apagadaOVacia
+      apagadaOVacia :: Caja -> Bool 
+      apagadaOVacia caja = 
+        if caja == on then False else True 
 
+      puedoContinuarCamino :: Circuito -> Bool -> Bool 
+      puedoContinuarCamino c recC = case c of 
+        Caja  caja           -> if caja == on then True else False -- transfomar e funcion aux!¡!¡!
+        Serie ci cd          -> recC      
+        Paralelo ce ci cd cs -> if apagadaOVacia ce || apagadaOVacia cs then False else recC
 
--}
 
 -- 5: cantidadPrendidas
 
@@ -174,14 +181,14 @@ circuitoEmprolijado c =
   if esCircuitoProlijo c 
   then c 
   else foldCircuito
-  (\caja -> Caja caja)
-  (\recCi recCd -> Serie recCd recCi)
-  (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
+        (\caja -> Caja caja)
+        (\recCi recCd -> Serie recCd recCi)
+        (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
 
 -- 9: tienenLaMismaEstructura 
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
-tienenLaMismaEstructura =
+tienenLaMismaEstructura = undefined
 
 -- 10: subCircuitoMásResistente
 subCircuitoMásResistente = undefined -- TODO: COMPLETAR
@@ -224,3 +231,4 @@ ejemplo = Serie
             )
             cajaOn
 ejemplo2 = Serie cajaOn (Serie cajaOff cajaOn)
+
