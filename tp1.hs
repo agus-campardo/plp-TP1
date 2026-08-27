@@ -196,8 +196,26 @@ circuitoEmprolijado c =
   then c 
   else foldCircuito
         (\caja -> Caja caja)
-        (\recCi recCd -> Serie recCd recCi)
+        (\recCi recCd -> Serie recCd recCi) 
+        -- pero qué pasa si tengo 
+        -- Serie ci cd, donde ambos son Series?
+        -- o sea, Serie (Serie 1) (Serie 2)
+
+        -- cuando lo de vuelta no va a ser prolijo porque en 
+        -- la segunda posición aún voy a tener una Serie 😛
         (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
+
+circuitoEmprolijado c = 
+  if esCircuitoProlijo c then c else emprolijar 
+
+  where 
+    emprolijar :: Circuito -> Circuito
+    emprolijar = \c foldCircuito
+      (\caja -> Caja caja)
+      (\)
+      (\ce recCi recCd cs -> Paralelo ce recCi recCd cs)
+
+
 
 -- 9: tienenLaMismaEstructura 
 
