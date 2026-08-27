@@ -17,6 +17,7 @@ data Circuito = Caja     Caja
 instance Show Circuito where
     show = showDeCircuito
 
+
 showDeCircuito :: Circuito -> String
 showDeCircuito (Caja caja) = showDeCaja caja
 showDeCircuito (Serie circuitoInicial circuitoFinal) =
@@ -205,22 +206,33 @@ circuitoEmprolijado c =
         -- la segunda posición aún voy a tener una Serie 😛
         (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
 
-circuitoEmprolijado c = 
-  if esCircuitoProlijo c then c else emprolijar 
+{-
+  if esCircuitoProlijo c then c else emprolijarCircuito c 
 
   where 
-    emprolijar :: Circuito -> Circuito
-    emprolijar = \c foldCircuito
+    emprolijarCircuito :: Circuito -> Circuito
+    emprolijarCircuito = foldCircuito
       (\caja -> Caja caja)
-      (\)
+      (\recCi recCd -> 
+        if not(esSerie recCd) then Serie recCi recCd else 
+          emprolijarSerieDoble recCi recCd
+      )
       (\ce recCi recCd cs -> Paralelo ce recCi recCd cs)
-
-
+   
+    esSerie :: Circuito -> Bool
+    esSerie c = case c of 
+      Serie _ _ -> True 
+      _         -> False 
+    
+    emprolijarSerieDoble :: Circuito -> Circuito -> Circuito 
+    emprolijarSerieDoble cFijo (Serie ci cd) = 
+      Serie cFijo (Paralelo Nada ci cd Nada)
+-}
 
 -- 9: tienenLaMismaEstructura 
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
-tienenLaMismaEstructura = undefined
+tienenLaMismaEstructura = undefined 
 
 -- 10: subCircuitoMásResistente
 subCircuitoMásResistente = undefined -- TODO: COMPLETAR
