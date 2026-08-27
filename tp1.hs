@@ -115,6 +115,22 @@ hayCaminoIluminado =
             cajaOn
 -}
 
+{-
+hayCaminoIluminado :: Circuito -> Bool 
+hayCaminoIluminado = 
+  recCicuito 
+    (\caja -> caja == on)
+    (\_ recCi recCd _ -> recCi && recCd)
+    (\ce ci recCi cd recCd cs -> 
+      if apagadaOVacia ce || apagadaOVacia cs then False else 
+      puedoContinuarCamino ci recCi || puedoContinuarCamino cd recCd)
+
+    where
+      apagadaOVacia
+
+
+-}
+
 -- 5: cantidadPrendidas
 
 cantidadPrendidas :: Circuito -> Int 
