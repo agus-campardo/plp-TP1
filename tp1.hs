@@ -144,7 +144,7 @@ cantidadPrendidas :: Circuito -> Int
 cantidadPrendidas =
   foldCircuito
     (\caja -> 
-      if caja == on then 1 else 0)
+      if caja == on then 1 else 0) -- MODULARIZAR
     (\recCi recCd -> recCd + recCi)
     (\ce recCi recCd cs -> 
       cantidadPrendidasPorLado ce recCi + 
@@ -169,9 +169,23 @@ esCircuitoProlijo = recCircuito
   (\caja -> True)
   (\ci recCi cd recCd -> 
     case ci of
-    Caja _ -> False    
-    _ -> True && recCi && recCd -- PREGUNTAR ¡!¡!¡!
+      Caja _ -> False    
+      _      -> True && recCi && recCd -- PREGUNTAR ¡!¡!¡!
+          -- hace falta el True ¿? 
   ) 
+
+  {-
+  cualquier otra cosa que no sea Serie no me importa. 
+  Serie ci cd 
+    - ci puede ser cualquier cosa, no me importa :) 
+    - cd NO PUEDE SER SERIE   
+  
+  (\_ recCi cd recCd -> 
+    case cd of 
+      Serie _ _ -> False 
+      _         -> recCi && recCd
+  )
+  -}
   (\_ _ recCi _ recCd _ -> recCi && recCd)
 
 -- 8: circuitoEmprolijado 
