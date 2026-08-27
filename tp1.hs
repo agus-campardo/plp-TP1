@@ -121,7 +121,7 @@ hayCaminoIluminado :: Circuito -> Bool
 hayCaminoIluminado = 
   recCircuito 
     (\caja -> caja == on)
-    (\_ recCi _recCd -> recCi && recCd)
+    (\_ recCi _ recCd -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
       if apagadaOVacia ce || apagadaOVacia cs then False else 
       puedoContinuarCamino ci recCi || puedoContinuarCamino cd recCd)
