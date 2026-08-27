@@ -230,9 +230,35 @@ circuitoEmprolijado c =
 -}
 
 -- 9: tienenLaMismaEstructura 
+{-
+Representemos a los constructores del Circuito de la siguiente manera 
+  - Caja = [valor], el valor en este ejercicio no me importa
+      les pondremos X a los valores de la caja 
+  - Serie = [Circuito, Circuito]
+  - Paralelo = [Caja, Circuito, Circuito, Caja] 
+
+Propongo representar, a modo de ejemplo, el siguiente circuito 
+ejemplo = Serie cajaOn (Serie cajaOff cajaOn)
+
+[[x], [[x], [x]]] 
+
+-}
+{-
+ESTO ESTA MAL 
+transfomar = 
+  foldCircuito 
+    (\_ -> [_])
+    (\recCi recCd -> [recCi, recCd])
+    (\ce recCi recCd cs -> [ce, recCi, recCd, cs])
+-}
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
 tienenLaMismaEstructura = undefined 
+-- transformacionC1 == transformacionC2 
+-- where 
+  -- transformacionC1 = transformar c1
+  -- transformacionC2 = transformar c2
+
 
 -- 10: subCircuitoMásResistente
 subCircuitoMásResistente = undefined -- TODO: COMPLETAR
