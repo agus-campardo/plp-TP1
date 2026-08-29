@@ -86,57 +86,18 @@ invertido = foldCircuito
               (\ce recCi recCd cs -> Paralelo cs recCd recCi ce) 
 
 -- 4: hayCaminoIluminado
--- PREGUNTAR ¡!¡!¡!¡!¡!
-{-
-hayCaminoIluminado :: Circuito -> Bool 
-hayCaminoIluminado = 
-  foldCircuito 
-    (\caja -> caja == on)
-    (\recCi recCd -> recCi && recCd)
-    (\ce recCi recCd cs -> 
-      ce == on && on -> 
-        offrecCi && recCd && cs == on)
--}  
-  
-  
-{--  
-  recCircuito 
-    (\caja -> lol)
-    (\ci recCi cd recCd -> recCi && recCd)
-    (\ce ci recCi cd recCd cs -> 
-      case ci of   
-
-    )jemplo = Serie
-            ( Paraleloon
-                on
-                (Paralelo off cajaNada cajaOn on)
-                (Paralelo Nada cajaOn cajaOff Nada)
-                on
-            )
-            cajaOn
--}
-
--- CONSIDERÉ QU EL CAMINO ES SOLO DE PRENDIDAS
--- PREGUNTAR A QUÉ SE CONSIDERA CAMINO 
+-- solo considera las cajas con bombillas prendidas 
 hayCaminoIluminado :: Circuito -> Bool 
 hayCaminoIluminado = 
   recCircuito 
     (\caja -> caja == on)
     (\_ recCi _ recCd -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
-      if apagadaOVacia ce || apagadaOVacia cs then False else 
-      puedoContinuarCamino ci recCi || puedoContinuarCamino cd recCd)
+      esCajaIluminada ce && (recCi || recCd) && esCajaIluminada cs)
 
-    where
-      apagadaOVacia :: Caja -> Bool 
-      apagadaOVacia caja = 
-        if caja == on then False else True 
-
-      puedoContinuarCamino :: Circuito -> Bool -> Bool 
-      puedoContinuarCamino c recC = case c of 
-        Caja  caja           -> if caja == on then True else False -- transfomar e funcion aux!¡!¡!
-        Serie ci cd          -> recC      
-        Paralelo ce ci cd cs -> if apagadaOVacia ce || apagadaOVacia cs then False else recC
+  
+esCajaIluminada :: Caja -> Bool 
+esCajaIluminada caja = caja == on
 
 
 -- 5: cantidadPrendidas
@@ -144,8 +105,7 @@ hayCaminoIluminado =
 cantidadPrendidas :: Circuito -> Int 
 cantidadPrendidas =
   foldCircuito
-    (\caja -> 
-      if caja == on then 1 else 0) -- MODULARIZAR
+    (\caja -> if esCajaIluminada caja then 1 else 0) 
     (\recCi recCd -> recCd + recCi)
     (\ce recCi recCd cs -> 
       cantidadPrendidasPorLado ce recCi + 
@@ -158,11 +118,13 @@ cantidadPrendidas =
         if caja == on then 1 + rec else rec 
 
 -- 6: cajasDeCircuito
+
 cajasDeCircuito :: Circuito -> [Caja]
 cajasDeCircuito = foldCircuito
   (\caja -> [caja])
   (\recCi recCd -> recCi ++ recCd)
   (\ce recCi recCd cs -> [ce] ++ recCi ++ recCd ++ [cs])
+
 
 -- 7: esCircuitoProlijo
 esCircuitoProlijo :: Circuito -> Bool
@@ -191,6 +153,11 @@ esCircuitoProlijo = recCircuito
 
 -- 8: circuitoEmprolijado 
 -- PREGUNTAR ¡!¡!¡!¡!
+
+-- de clase del 28/6: hay que ordenar usando lógica pre-oreden. 
+-- tirar todas las series la la izq 
+-- (no se puede usar Paralelo ni modificar la estructura en si. se debe preservar el "camino" de las luces y el estado y cantindad de las bombillas en las cajas )
+
 circuitoEmprolijado :: Circuito -> Circuito
 circuitoEmprolijado c = 
   if esCircuitoProlijo c 
@@ -206,59 +173,11 @@ circuitoEmprolijado c =
         -- la segunda posición aún voy a tener una Serie 😛
         (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
 
-{-
-  if esCircuitoProlijo c then c else emprolijarCircuito c 
-
-  where 
-    emprolijarCircuito :: Circuito -> Circuito
-    emprolijarCircuito = foldCircuito
-      (\caja -> Caja caja)
-      (\recCi recCd -> 
-        if not(esSerie recCd) then Serie recCi recCd else 
-          emprolijarSerieDoble recCi recCd
-      )
-      (\ce recCi recCd cs -> Paralelo ce recCi recCd cs)
-   
-    esSerie :: Circuito -> Bool
-    esSerie c = case c of 
-      Serie _ _ -> True 
-      _         -> False 
-    
-    emprolijarSerieDoble :: Circuito -> Circuito -> Circuito 
-    emprolijarSerieDoble cFijo (Serie ci cd) = 
-      Serie cFijo (Paralelo Nada ci cd Nada)
--}
-
 -- 9: tienenLaMismaEstructura 
-{-
-Representemos a los constructores del Circuito de la siguiente manera 
-  - Caja = [valor], el valor en este ejercicio no me importa
-      les pondremos X a los valores de la caja 
-  - Serie = [Circuito, Circuito]
-  - Paralelo = [Caja, Circuito, Circuito, Caja] 
-
-Propongo representar, a modo de ejemplo, el siguiente circuito 
-ejemplo = Serie cajaOn (Serie cajaOff cajaOn)
-
-[[x], [[x], [x]]] 
-
--}
-{-
-ESTO ESTA MAL 
-transfomar = 
-  foldCircuito 
-    (\_ -> [_])
-    (\recCi recCd -> [recCi, recCd])
-    (\ce recCi recCd cs -> [ce, recCi, recCd, cs])
--}
+-- idea: hacer similar al take que hicimos en clase 
 
 tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
 tienenLaMismaEstructura = undefined 
--- transformacionC1 == transformacionC2 
--- where 
-  -- transformacionC1 = transformar c1
-  -- transformacionC2 = transformar c2
-
 
 -- 10: subCircuitoMásResistente
 subCircuitoMásResistente = undefined -- TODO: COMPLETAR
