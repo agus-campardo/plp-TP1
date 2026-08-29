@@ -97,7 +97,7 @@ hayCaminoIluminado =
 
   
 esCajaIluminada :: Caja -> Bool 
-esCajaIluminada caja = caja == on
+esCajaIluminada = (== on)
 
 
 -- 5: cantidadPrendidas
@@ -106,7 +106,7 @@ cantidadPrendidas :: Circuito -> Int
 cantidadPrendidas =
   foldCircuito
     (\caja -> if esCajaIluminada caja then 1 else 0) 
-    (\recCi recCd -> recCd + recCi)
+    (+)
     (\ce recCi recCd cs -> 
       cantidadPrendidasPorLado ce recCi + 
       cantidadPrendidasPorLado cs recCd   
@@ -122,33 +122,19 @@ cantidadPrendidas =
 cajasDeCircuito :: Circuito -> [Caja]
 cajasDeCircuito = foldCircuito
   (\caja -> [caja])
-  (\recCi recCd -> recCi ++ recCd)
+  (++)
   (\ce recCi recCd cs -> [ce] ++ recCi ++ recCd ++ [cs])
 
 
 -- 7: esCircuitoProlijo
+
 esCircuitoProlijo :: Circuito -> Bool
 esCircuitoProlijo = recCircuito
-  (\caja -> True)
-  (\ci recCi cd recCd -> 
-    case ci of
-      Caja _ -> False    
-      _      -> True && recCi && recCd -- PREGUNTAR ¡!¡!¡!
-          -- hace falta el True ¿? 
-  ) 
-
-  {-
-  cualquier otra cosa que no sea Serie no me importa. 
-  Serie ci cd 
-    - ci puede ser cualquier cosa, no me importa :) 
-    - cd NO PUEDE SER SERIE   
-  
+  (const True)
   (\_ recCi cd recCd -> 
-    case cd of 
-      Serie _ _ -> False 
-      _         -> recCi && recCd
-  )
-  -}
+      case cd of 
+        Serie _ _ -> False 
+        _         -> recCi && recCd)
   (\_ _ recCi _ recCd _ -> recCi && recCd)
 
 -- 8: circuitoEmprolijado 
