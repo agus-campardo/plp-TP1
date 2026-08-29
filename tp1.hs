@@ -90,7 +90,7 @@ invertido = foldCircuito
 hayCaminoIluminado :: Circuito -> Bool 
 hayCaminoIluminado = 
   recCircuito 
-    (\caja -> caja == on)
+    esCajaIluminada
     (\_ recCi _ recCd -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
       esCajaIluminada ce && (recCi || recCd) && esCajaIluminada cs)
@@ -142,7 +142,8 @@ esCircuitoProlijo = recCircuito
 
 -- de clase del 28/6: hay que ordenar usando lógica pre-oreden. 
 -- tirar todas las series la la izq 
--- (no se puede usar Paralelo ni modificar la estructura en si. se debe preservar el "camino" de las luces y el estado y cantindad de las bombillas en las cajas )
+-- (no se puede usar Paralelo ni modificar la estructura en si. se debe preservar 
+-- el "camino" de las luces y el estado y cantindad de las bombillas en las cajas )
 
 circuitoEmprolijado :: Circuito -> Circuito
 circuitoEmprolijado c = 
@@ -160,10 +161,27 @@ circuitoEmprolijado c =
         (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
 
 -- 9: tienenLaMismaEstructura 
--- idea: hacer similar al take que hicimos en clase 
+{-
+Para resolver el ejercicio, decidimos tomar las ideas aportadas para la función "take" vistas en clase. 
+Tanto recCI y como recCd será una función de tipo Circuito -> Bool, para que podamos pasarle el segundo circuito (c2)
+y así comparar su estructura. 
+-}
 
-tienenLaMismaEstructura :: Circuito -> Circuito -> Bool
-tienenLaMismaEstructura = undefined 
+tienenLaMismaEstructura :: Circuito -> (Circuito -> Bool)
+tienenLaMismaEstructura = 
+  foldCircuito 
+    (\caja -> \c2 -> case c2 of 
+                    Caja _ -> True 
+                    _      -> False 
+    ) 
+    (\recCi recCd -> \c2 -> case c2 of 
+                        Serie ci cd -> (recCi ci) && (recCd cd) 
+                        _           -> False
+    )
+    (\_ recCi recCd _ -> \c2 -> case c2 of 
+                              Paralelo _ ci cd _  -> (recCi ci) && (recCd cd)
+                              _                   -> False 
+    ) 
 
 -- 10: subCircuitoMásResistente
 subCircuitoMásResistente = undefined -- TODO: COMPLETAR
@@ -190,6 +208,11 @@ not :: Bool -> Bool
 {NT} not True = False
 {NF} not False = True
 
+Principio de inducción sobre Circuitos
+
+
+
+
 --}
 
 
@@ -204,4 +227,14 @@ ejemplo = Serie
             )
             cajaOn
 ejemplo2 = Serie cajaOn (Serie cajaOff cajaOn)
+
+ejemplo3 = Serie
+            ( Paralelo
+                off
+                (Paralelo on cajaOn cajaOn off)
+                (Paralelo on cajaOn cajaOff on)
+                on
+            )
+            cajaNada
+
 
