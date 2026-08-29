@@ -190,8 +190,6 @@ not :: Bool -> Bool
 {NT} not True = False
 {NF} not False = True
 
--- TODO: COMPLETAR
-
 --}
 
 

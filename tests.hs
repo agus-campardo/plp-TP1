@@ -16,6 +16,16 @@ testsInvertido = TestList -- TODO: AGREGAR
     ~?= cajaNada
   ]
 
+  Principio de inducción sobre Circuitos -
+Sea P una propiedad sobre extresiones de tipo Circuito tal que 
+  ⊳ paraTodo caja. P(Caja caja)
+  ⊳ paraTodo ci :: Circuito. paraTodo cd :: Circuito. P(ci) y P(cd) -> P(Serie ci cd)
+  ⊳ paraTodo ce, cs :: Caja. paraTodo ci, cd :: Circuito. P(ce) y P(cs) y P(ci) y P(cd) -> P(Paralelo ce ci cd cs)
+Entonces, vale paraTodox :: Circuito. P(x). 
+
+Usando inducción estructural, queremos ver que paraTodoc :: Circuito se cumple que 
+  P(c) =- (alternado c) . (alternado c) = id c 
+
 testsHayCaminoIluminado :: Test
 testsHayCaminoIluminado = TestList -- TODO: AGREGAR
   [ "En una caja con bombilla encendida hay camino iluminado"
