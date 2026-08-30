@@ -207,10 +207,121 @@ id :: a -> a
 not :: Bool -> Bool
 {NT} not True = False
 {NF} not False = True
+------------------------------------------------------------------------------------------------
 
-Principio de inducción sobre Circuitos
+Principio de inducción sobre cajas 
+
+data Caja = Bombilla Bool | Nada
+
+Sea P una propiedad sobre expresiones del tipo Caja, basta mostrar que vale: 
+  ▷ ∀b :: Bool. P(b), entonces P(Bombilla b) 
+  ▷ P(Nada)
+Entonces, vale ∀x :: Caja. P(x). 
+
+------------------------------------------------------------------------------------------------
+
+Principio de inducción sobre circuitos
+
+data Circuito = Caja     Caja
+              | Serie    Circuito Circuito
+              | Paralelo Caja Circuito Circuito Caja
+
+(ↈ)
+Sea P una propiedad sobre expresiones de tipo Circuito basta mostrar que vale: 
+  ▷ ∀caja :: Caja. P(Caja caja)
+  ▷ ∀ci :: Circuito. ∀cd :: Circuito. P(ci) ∧ P(cd), entonces P(Serie ci cd)
+  ▷ ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cd :: Caja. P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)
+Entonces, vale ∀x :: Circuito. P(x). 
+
+Queremos demostrar la siguiente propiedad: alternado . alternado = id
+
+Por extensionalidad funcional, nos bastaría demostrar que ∀x :: Circuito. (alternado . alternado) x = id x
+Por {C}, esto es lo mismo que demostar que ∀x :: Circuito. alternado(alternado x) = id x
+
+Por inducción sobre Circuitos, bastaría con demostrar (ↈ). 
+Siendo P(x): alternado(alternado x) = id x. 
+
+  ▷ ∀caja :: Caja. 
+    P(Caja caja): alternado(alternado (Caja caja)) = id (Caja caja)
+
+      - alternado(alternado (Caja caja)) 
+        {AC} = alternado(Caja (cajaAlternada caja))
+        {AC} = Caja (cajaAlternada (cajaAlternada caja))
+
+        Sea data Caja = Bombilla Bool | Nada
+
+        Sea Q una propiedad sobre expresiones del tipo Caja, basta mostrar que vale: 
+          ▷ ∀b :: Bool. Q(Bombilla b) 
+          ▷ Q(Nada)
+        Entonces, vale ∀x :: Caja. Q(x). 
+        
+        Q(x): Caja (cajaAlternada (cajaAlternada x)) = id (Caja x)
+
+        Probemos 
+          ▷ ∀b :: Bool. Q(Bombilla b) 
+            Por inducción sobre booleanos, basta probar que Q(Bombilla True) y Q(Bombilla False)
+
+            - Q(Bombilla True): Caja (cajaAlternada (cajaAlternada (Bombilla True))) = id (Caja (Bombilla True))
+
+              -- Caja (cajaAlternada (cajaAlternada (Bombilla True))) 
+                {CAB} = Caja (cajaAlternada (Bombilla not True)) 
+                {NT}  = Caja (cajaAlternada (Bombilla False)) 
+                {CAB} = Caja (Bombilla not False) 
+                {NF}  = Caja (Bombilla True) 
+                {I}   = id (Caja (Bombilla True)) 
+
+                Que era lo que queríamos probar. 
+            
+            - Q(Bombilla False): Caja (cajaAlternada (cajaAlternada (Bombilla False))) = id (Caja (Bombilla False))
+
+              -- Caja (cajaAlternada (cajaAlternada (Bombilla False))) 
+                {CAB} = Caja (cajaAlternada (Bombilla not False)) 
+                {NF}  = Caja (cajaAlternada (Bombilla True)) 
+                {CAB} = Caja (Bombilla not True) 
+                {NT}  = Caja (Bombilla False) 
+                {I}   = id (Caja (Bombilla False)) 
+
+                Que era lo que queríamos probar. 
+            
+          ▷ Q(Nada): Caja (cajaAlternada (cajaAlternada Nada)) = id (Caja Nada)  
+
+            - Caja (cajaAlternada (cajaAlternada (Nada)))
+              {CAN} = Caja (cajaAlternada Nada)
+              {CAN} = Caja Nada          
+              {I}   = id (Caja Nada)
+
+              Que era lo que queríamos probar. 
 
 
+  ▷ ∀ci :: Circuito. ∀cd :: Circuito. P(ci) ∧ P(cd), entonces P(Serie ci cd)
+    P(Serie ci cd): alternado(alternado (Serie ci cd)) = id (Serie ci cd)
+
+    - alternado(alternado (Serie ci cd))
+      {AS} = alternado(Serie (alternado ci) (alternado cd)) 
+      {AS} = Serie (alternado(alternado ci)) (alternado(alternado cd))
+      {HI} = Serie (id ci) (id cd) 
+      {I}  = Serie ci cd 
+      {I}  = id (Serie ci cd) 
+
+  ▷ ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cd :: Caja. P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)
+    P(Paralelo ce ci cd cs): alternado(alternado (Paralelo ce ci cd cs)) = id (Paralelo ce ci cd cs)
+
+    - alternado(alternado (Paralelo ce ci cd cs))
+      {AP} = alternado(Paralelo (cajaAlternada ce) (alternado ci) (alternado cd) (cajaAlternada cs))
+      {AP} = Paralelo (cajaAlternado(cajaAlternada ce)) (alternado(alternado ci)) (alternado(alternado cd)) (cajaAlternado(cajaAlternada cs))
+      {HI} = Paralelo (cajaAlternado(cajaAlternada ce)) (id ci) (id cd) (cajaAlternado(cajaAlternada cs))
+      {por haber probado Q(x) en inducción sobre cajas} 
+          = Paralelo (id ce) (id ci) (id cd) (id cs)
+      {I}  = Paralelo ce ci cd cs 
+      {I}  = id (Paralelo ce ci cd cs)
+
+    
+  
+
+
+
+                                      
+     
 
 
 --}
