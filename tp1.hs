@@ -257,7 +257,7 @@ Siendo P(x): alternado(alternado x) = id x.
         
         Q(x): Caja (cajaAlternada (cajaAlternada x)) = id (Caja x)
 
-        Probemos 
+        Probemos  
           ▷ ∀b :: Bool. Q(Bombilla b) 
             Por inducción sobre booleanos, basta probar que Q(Bombilla True) y Q(Bombilla False)
 
