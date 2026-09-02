@@ -137,6 +137,8 @@ esCircuitoProlijo = recCircuito
         _         -> recCi && recCd)
   (\_ _ recCi _ recCd _ -> recCi && recCd)
 
+{-
+TODO: BORRAR
 -- 8: circuitoEmprolijado 
 -- PREGUNTAR ¡!¡!¡!¡!
 
@@ -159,11 +161,12 @@ circuitoEmprolijado c =
         -- cuando lo de vuelta no va a ser prolijo porque en 
         -- la segunda posición aún voy a tener una Serie 😛
         (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
+-}
 
 -- 9: tienenLaMismaEstructura 
 {-
 Para resolver el ejercicio, decidimos tomar las ideas aportadas para la función "take" vistas en clase. 
-Tanto recCI y como recCd será una función de tipo Circuito -> Bool, para que podamos pasarle el segundo circuito (c2)
+Tanto recCI y como recCd serán una función de tipo Circuito -> Bool, para que podamos pasarle el segundo circuito (c2)
 y así comparar su estructura. 
 -}
 
@@ -359,7 +362,7 @@ Entonces, vale ∀x :: Circuito. P(x).
 LEMAS DE GENERACIÓN: 
 Los usaremos para hacer análisis de casos sin inducción . 
 
-Lema de generación para cajas 
+Lema de generación para cajas: 
 
 data Caja = Bombilla Bool | Nada
 
@@ -368,7 +371,7 @@ Si caja :: Caja, entonces:
   - o bien, ∃b :: Bool. caja = Bombilla b
 
 
-Lemas de generación para booleanos 
+Lemas de generación para booleanos:
 
 data Bool = True | False 
 
@@ -445,11 +448,7 @@ CASO BASE: ∀caja :: Caja. P(Caja caja)
 
 
 
-
-
-
-
-ejemplo = Serie
+ejemplo1 = Serie
             ( Paralelo
                 on
                 (Paralelo off cajaNada cajaOn on)
@@ -457,15 +456,25 @@ ejemplo = Serie
                 on
             )
             cajaOn
+
+ejemplo1_invertido = Serie
+                      cajaOn
+                      ( Paralelo
+                          on
+                          (Paralelo Nada cajaOff cajaOn Nada)
+                          (Paralelo on cajaOn cajaNada off)
+                          on
+                      )
+
 ejemplo2 = Serie cajaOn (Serie cajaOff cajaOn)
 
 ejemplo3 = Serie
             ( Paralelo
-                off
-                (Paralelo on cajaOn cajaOn off)
+                on
+                (Paralelo on cajaOn cajaOn on)
                 (Paralelo on cajaOn cajaOff on)
                 on
             )
-            cajaNada
+            cajaOn
 
 

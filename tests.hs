@@ -14,12 +14,21 @@ testsInvertido = TestList -- TODO: AGREGAR
   , "Caja invertida (3)"
     ~: invertido cajaNada
     ~?= cajaNada
+  , "Caja invertida (4)"
+    ~: invertido ejemplo1 
+    ~?= ejemplo1_invertido
   ]
 
 testsHayCaminoIluminado :: Test
 testsHayCaminoIluminado = TestList -- TODO: AGREGAR
   [ "En una caja con bombilla encendida hay camino iluminado"
     ~: hayCaminoIluminado cajaOn
+    ~?= True
+  , "Camino iluminado (2)"
+    ~: hayCaminoIluminado ejemplo1 
+    ~?= False
+  , "Camino ilumnidado (3)"
+    ~: hayCaminoIluminado ejemplo3
     ~?= True
   ]
 
@@ -28,6 +37,12 @@ testsCantidadPrendidas = TestList -- TODO: AGREGAR
   [ "Cantidad prendidas en caja prendida es 1"
     ~: cantidadPrendidas cajaOn
     ~?= 1
+  , "Cantidad prendidas (2)"
+    ~: cantidadPrendidas ejemplo1 
+    ~?= 6
+  , "Cantidad prendidas (4)"
+    ~: cantidadPrendidas ejemplo3
+    ~?= 10
   ]
 
 testsCajasDeCircuito :: Test
@@ -47,12 +62,13 @@ testsEsCircuitoProlijo = TestList -- TODO: AGREGAR
 -- NOTA: para correr este test, cambiar la línea 18 del archivo tp1.hs de "show = showDeCircuito" a
   -- "show = showDeCircuitoConEstructura".
   -- De esa forma, podrán distinguir la estructura de los circuitos en serie.
-testsCircuitoEmprolijado :: Test
+{-testsCircuitoEmprolijado :: Test
 testsCircuitoEmprolijado = TestList -- TODO: AGREGAR
   [ "La versión emprolijada de una caja es la misma caja"
     ~: circuitoEmprolijado cajaOn
     ~?= cajaOn
   ]
+-}
 
 testsTienenLaMismaEstructura :: Test
 testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
@@ -73,7 +89,7 @@ tests = TestList
   , TestLabel "cantidadPrendidas"        testsCantidadPrendidas
   , TestLabel "cajasDeCircuito"          testsCajasDeCircuito
   , TestLabel "esCircuitoProlijo"        testsEsCircuitoProlijo
-  , TestLabel "circuitoEmprolijado"      testsCircuitoEmprolijado
+  --, TestLabel "circuitoEmprolijado"      testsCircuitoEmprolijado
   , TestLabel "tienenLaMismaEstructura"  testsTienenLaMismaEstructura
   , TestLabel "subCircuitoMásResistente" testsSubCircuitoMásResistente
   ]
