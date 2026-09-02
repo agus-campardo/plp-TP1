@@ -228,6 +228,7 @@ Sea P una propiedad sobre expresiones del tipo Caja, basta mostrar que vale:
   ▷ P(Nada)
 Entonces, vale ∀x :: Caja. P(x). 
 
+
 ------------------------------------------------------------------------------------------------
 
 Principio de inducción sobre circuitos
@@ -330,11 +331,120 @@ Siendo P(x): alternado(alternado x) = id x.
 
 
 
-                                      
-     
-
-
+                            
 --}
+
+
+
+
+{-
+HECHO CON EL LEMA DE GENERACIÓN 
+
+(ↈ) PRINCIPIO DE INDUCCIÓN ESTRUCTURAL PARA CIRCUITOS: 
+
+data Circuito = Caja     Caja
+              | Serie    Circuito Circuito
+              | Paralelo Caja Circuito Circuito Caja
+
+Para probar P sobre todas las instancias de tipo T, basta probar P para cada uno de los constructores. 
+
+Sea P una propiedad sobre expresiones de tipo Circuito, basta mostrar que vale:
+  ▷ ∀caja :: Caja. P(Caja caja)                                               [caso base]
+  ▷ ∀ci :: Circuito. ∀cd :: Circuito. P(ci) ∧ P(cd), entonces P(Serie ci cd)  [caso inductivo]
+  ▷ ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cs :: Caja.
+    P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)                            [caso inductivo]
+Entonces, vale ∀x :: Circuito. P(x).
+
+
+LEMAS DE GENERACIÓN: 
+Los usaremos para hacer análisis de casos sin inducción . 
+
+Lema de generación para cajas 
+
+data Caja = Bombilla Bool | Nada
+
+Si caja :: Caja, entonces: 
+  - o bien, caja = Nada 
+  - o bien, ∃b :: Bool. caja = Bombilla b
+
+
+Lemas de generación para booleanos 
+
+data Bool = True | False 
+
+Si b :: Bool, entonces:
+  - o bien, b = True
+  - o bien, b = False 
+
+
+DEMO: 
+
+Queremos demostrostrar: alternado . alternado = id 
+
+Por extensionalidad funcional, nos bastaría demostrar que: 
+  ∀x :: Circuito. (alternado . alternado) x = id x
+
+Por {C}, esto es lo mismo que: 
+  ∀x :: Circuito. alternado(alternado x) = id x
+
+Definimos el predicado P(x) ≡ alternado (alternado x) = id x
+
+Por inducción estructural sobre Circuitos, basta demostrar (ↈ). 
+
+
+CASO BASE: ∀caja :: Caja. P(Caja caja)
+  P(Caja caja): alternado(alternado (Caja caja)) = id (Caja caja)
+
+  - alternado(alternado (Caja caja)) 
+    {AC} = alternado(Caja (cajaAlternada caja))
+    {AC} = Caja (cajaAlternada (cajaAlternada caja))
+  
+  Por lema de generación para cajas, hay dos posibilidades: 
+
+    Caso 1: caja = Nada 
+      
+      Caja (cajaAlternada (cajaAlternada Nada))
+      {CAN} = Caja (cajaAlternada Nada)
+      {CAN} = Caja Nada 
+      {ID}  = id (Caja Nada)
+
+      Entonces, P(Caja Nada) se cumple. 
+
+    Caso 2: ∃b :: Bool. caja = Bombilla b
+
+      Caja (cajaAlternada (cajaAlternada Bombilla b))
+      {CAB} = Caja (cajaAlternada (Bombilla (not b)))
+      {CAB} = Caja (Bombilla (not (not b)))
+
+      Por lema de generación para booleanos, hay dos posibilidades_ 
+
+        Caso 2.1: b = True 
+
+          Caja (Bomnilla (not (not True)))
+          {NT} = Caja (Bombilla (not False))
+          {NT} = Caja (Bombilla True)
+          {ID} = id (Caja (Bombilla True))
+        
+        Caso 2.2: b = False 
+
+          Caja (Bombilla (not (not False)))
+          {NF} = Caja (Bombilla (not True))
+          {NF} = Caja (Bombilla False)
+          {ID} = id (Caja (Bombilla False))
+
+  Por lo tanto, ∀caja :: Caja. P(Caja caja) queda demostrado
+
+  CASO INDUCTIVO: Serie (igual)
+  CASO INDUCTIVO: Paralelo (igual tambien)
+
+-}
+
+
+
+
+
+
+
 
 
 
