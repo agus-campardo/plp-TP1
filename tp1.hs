@@ -74,15 +74,15 @@ foldCircuito :: (Caja -> b) -> (b -> b -> b) -> (Caja -> b -> b -> Caja -> b) ->
 foldCircuito fCaja fSerie fParalelo = 
   recCircuito 
     fCaja
-    (\_ recCi _ recCd -> fSerie recCi recCd)
+    (\_ recCi _ recCd       -> fSerie recCi recCd)
     (\ce _ recCi _ recCd cs -> fParalelo ce recCi recCd cs)
 
 
 -- 3 invertido
 invertido :: Circuito -> Circuito
 invertido = foldCircuito 
-              (\caja -> Caja caja)
-              (\recCi recCd -> Serie recCd recCi)
+              Caja
+              (\recCi recCd       -> Serie recCd recCi)
               (\ce recCi recCd cs -> Paralelo cs recCd recCi ce) 
 
 -- 4: hayCaminoIluminado
@@ -91,7 +91,7 @@ hayCaminoIluminado :: Circuito -> Bool
 hayCaminoIluminado = 
   recCircuito 
     esCajaIluminada
-    (\_ recCi _ recCd -> recCi && recCd)
+    (\_ recCi _ recCd         -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
       esCajaIluminada ce && (recCi || recCd) && esCajaIluminada cs)
 
@@ -121,7 +121,7 @@ cantidadPrendidas =
 
 cajasDeCircuito :: Circuito -> [Caja]
 cajasDeCircuito = foldCircuito
-  (\caja -> [caja])
+  (\caja              -> [caja])
   (++)
   (\ce recCi recCd cs -> [ce] ++ recCi ++ recCd ++ [cs])
 
@@ -192,7 +192,7 @@ resistenciaCircuito = undefined
 
 subCircuitoMásResistente :: Circuito -> Circuito
 subCircuitoMásResistente = recCircuito
-  (\caja -> Caja caja)
+  Caja 
   (\ci recCi cd recCd -> comparar (comparar (comparar ci recCi) (comparar cd recCd)) (Serie ci cd))
   (\ce ci recCi cd recCd cs -> comparar (comparar (comparar ci recCi) (comparar cd recCd)) (Paralelo ce ci cd cs))
     where
