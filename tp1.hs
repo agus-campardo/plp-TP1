@@ -205,7 +205,21 @@ subCircuitoMásResistente = recCircuito
     where
       comparar :: Circuito -> Circuito -> Circuito 
       comparar c1 c2 = if resistenciaCircuito c1 >= resistenciaCircuito c2 then c1 else c2
-      
+
+{-- OPCIÓN PARA TESTEAR
+subCircuitoMásResistente' :: (Circuito -> Float) -> Circuito -> Circuito
+subCircuitoMásResistente' f = recCircuito
+  Caja 
+  (\ci recCi cd recCd -> comparar (comparar (comparar ci recCi) (comparar cd recCd)) (Serie ci cd))
+  (\ce ci recCi cd recCd cs -> comparar (comparar (comparar ci recCi) (comparar cd recCd)) (Paralelo ce ci cd cs))
+    where
+      comparar :: Circuito -> Circuito -> Circuito 
+      comparar c1 c2 = if f c1 >= f c2 then c1 else c2
+
+subCircuitoMásResistente :: Circuito -> Circuito
+subCircuitoMásResistente = subCircuitoMásResistente' resistenciaCircuito
+--}
+
 {-- 11: Demostrar: alternado . alternado = id
 
 alternado :: Circuito -> Circuito
