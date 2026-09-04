@@ -48,11 +48,13 @@ cajaOff  = Caja off
 cajaNada = Caja Nada
 
 {-
-data Circuito = Caja     Caja
-              | Serie    Circuito Circuito
-              | Paralelo Caja Circuito Circuito Caja
-
-data Caja = Bombilla Bool | Nada
+comentarios y consideraciones del viernes 4/9: 
+  ▶ una caja vacia conduce 
+  ▶ "los bugs están en los casos más pequeños". 
+      3 <= cantidadTests <= 5 
+      ver de hacer uno por cada constructor? 
+  ▶ en el ej10: quiero que me de el resultado para todas las combinaciones de funciones posibles 
+    darle definicion a la funcion de resistencia
 
 -}
 
