@@ -87,17 +87,22 @@ invertido = foldCircuito
               (\recCi recCd       -> Serie recCd recCi)
               (\ce recCi recCd cs -> Paralelo cs recCd recCi ce) 
 
+
 -- 4: hayCaminoIluminado
 -- solo considera las cajas con bombillas prendidas 
 hayCaminoIluminado :: Circuito -> Bool 
 hayCaminoIluminado = 
   recCircuito 
-    esCajaIluminada
+    esCajaConductora 
     (\_ recCi _ recCd         -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
       esCajaIluminada ce && (recCi || recCd) && esCajaIluminada cs)
 
-  
+  where 
+    esCajaConductora :: Caja -> Bool 
+    esCajaConductora caja = esCajaIluminada caja || caja == Nada
+
+
 esCajaIluminada :: Caja -> Bool 
 esCajaIluminada = (== on)
 
