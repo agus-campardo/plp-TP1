@@ -437,8 +437,14 @@ circuito1 = cajaOn
 circuito2 :: Circuito
 circuito2 = Serie cajaOn cajaOff
 
+circuito2_invertido :: Circuito
+circuito2_invertido = Serie cajaOff cajaOn
+
 circuito3 :: Circuito
 circuito3 = Paralelo on cajaNada cajaOff off 
+
+circuito3_invertido :: Circuito
+circuito3_invertido = Paralelo off cajaOff cajaNada on
 
 circuito4 :: Circuito
 circuito4 = Serie
@@ -460,6 +466,8 @@ circuito4_invertido = Serie
                           on
                       )
 
+circuito5 :: Circuito
+circuito5 = Serie cajaOn (Serie cajaOff cajaOn)
 
 {-
 Eliminar 'esIluminado' del ejercicio 4/5 
