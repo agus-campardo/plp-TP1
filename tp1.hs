@@ -461,3 +461,40 @@ circuito4_invertido = Serie
 circuito5 :: Circuito
 circuito5 = Serie cajaOn (Serie cajaOff cajaOn)
 
+-- Todo prendido
+circuito6 :: Circuito 
+circuito6 = 
+  Serie
+    (Serie cajaOn cajaOn)
+    (Paralelo on cajaOn (Serie cajaOn cajaOn) on)
+-- Deberia devolver Circuito6
+
+-- Todo apagado
+circuito7 :: Circuito
+circuito7 = 
+  Serie
+    (Serie cajaOff cajaOff)
+    (Paralelo off (Serie cajaOff cajaOff) cajaOff off)
+-- Deberia devolver Circuito7
+
+-- Todo vacío
+circuito8 :: Circuito
+circuito8 = 
+  Serie
+    (Serie cajaNada cajaNada)
+    (Paralelo Nada (Serie cajaNada cajaNada) cajaNada Nada)
+-- Deberia devolver Circuito8
+
+circuito9 :: Circuito
+circuito9 = 
+  Serie
+    (Paralelo off cajaOff cajaOff off) 
+    (Paralelo off cajaOff (Serie cajaOn cajaOn) Nada) 
+-- Aca deberia devolver (Serie cajaOn cajaOn) que esta adentro de un paralelo con una resistencia mas baja
+
+circuito10 :: Circuito
+circuito10 = 
+  Serie
+    (Paralelo off cajaOn cajaOff on)
+    (Serie cajaOn cajaOn)
+-- Aca deberia devolver (Serie cajaOn cajaOn) que compara entre una seria y un paralelo

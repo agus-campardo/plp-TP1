@@ -112,9 +112,25 @@ testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
   ]
 
 testsSubCircuitoMásResistente :: Test
-testsSubCircuitoMásResistente = TestList -- TODO: AGREGAR
-  [
-    
+testsSubCircuitoMásResistente = TestList
+  [ "Circuito 6: Todo prendido"
+    ~: subCircuitoMásResistente circuito6
+    ~?= circuito6
+  , "Circuito 7: Todo apagado"
+    ~: subCircuitoMásResistente circuito7
+    ~?= circuito7
+  , "Circuito 8: Todo vacio"
+    ~: subCircuitoMásResistente circuito8
+    ~?= circuito8
+  , "Circuito 9: Devuelve el subcircuito interno (Serie cajaOn cajaOn) frente al resto"
+    ~: subCircuitoMásResistente circuito9
+    ~?= Serie cajaOn cajaOn
+  , "Circuito 10: Entre un paralelo deficiente y una serie perfecta, devuelve la serie"
+    ~: subCircuitoMásResistente circuito10
+    ~?= Serie cajaOn cajaOn
+  , "Circuito 4: Devuelve una caja individual en vez del conjunto mas complejo"
+    ~: subCircuitoMásResistente circuito4
+    ~?= cajaOn
   ]
 
 tests :: Test
