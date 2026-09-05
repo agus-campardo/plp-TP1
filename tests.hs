@@ -103,10 +103,10 @@ testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
   , "acá, circuito3 y su invertido tienen misma estructura"
     ~: tienenLaMismaEstructura circuito3 circuito3_invertido
     ~?= True
-  , "circuito4 y su invertido NO tienen la misma estructura"
+  , "circuito4 y su invertido no tienen la misma estructura"
     ~: tienenLaMismaEstructura circuito4 circuito4_invertido
     ~?= False
-  , "circuito4 y circuito3 NO tienen la misma estructura"
+  , "circuito4 y circuito3 no tienen la misma estructura"
     ~: tienenLaMismaEstructura circuito4 circuito3
     ~?= False
   ]
