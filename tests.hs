@@ -1,6 +1,85 @@
 import Test.HUnit
 import TP1
 
+
+
+circuito1 :: Circuito
+circuito1 = cajaOn
+
+circuito2 :: Circuito
+circuito2 = Serie cajaOn cajaOff
+
+circuito2_invertido :: Circuito
+circuito2_invertido = Serie cajaOff cajaOn
+
+circuito3 :: Circuito
+circuito3 = Paralelo on cajaNada cajaOff off 
+
+circuito3_invertido :: Circuito
+circuito3_invertido = Paralelo off cajaOff cajaNada on
+
+circuito4 :: Circuito
+circuito4 = Serie
+            ( Paralelo
+                on
+                (Paralelo off cajaNada cajaOn on)
+                (Paralelo Nada cajaOn cajaOff Nada)
+                on
+            )
+            cajaOn
+
+circuito4_invertido :: Circuito
+circuito4_invertido = Serie
+                      cajaOn
+                      ( Paralelo
+                          on
+                          (Paralelo Nada cajaOff cajaOn Nada)
+                          (Paralelo on cajaOn cajaNada off)
+                          on
+                      )
+
+circuito5 :: Circuito
+circuito5 = Serie cajaOn (Serie cajaOff cajaOn)
+
+-- Todo prendido
+circuito6 :: Circuito 
+circuito6 = 
+  Serie
+    (Serie cajaOn cajaOn)
+    (Paralelo on cajaOn (Serie cajaOn cajaOn) on)
+-- Deberia devolver Circuito6
+
+-- Todo apagado
+circuito7 :: Circuito
+circuito7 = 
+  Serie
+    (Serie cajaOff cajaOff)
+    (Paralelo off (Serie cajaOff cajaOff) cajaOff off)
+-- Deberia devolver Circuito7
+
+-- Todo vacío
+circuito8 :: Circuito
+circuito8 = 
+  Serie
+    (Serie cajaNada cajaNada)
+    (Paralelo Nada (Serie cajaNada cajaNada) cajaNada Nada)
+-- Deberia devolver Circuito8
+
+circuito9 :: Circuito
+circuito9 = 
+  Serie
+    (Paralelo off cajaOff cajaOff off) 
+    (Paralelo off cajaOff (Serie cajaOn cajaOn) Nada) 
+-- Aca deberia devolver (Serie cajaOn cajaOn) que esta adentro de un paralelo con una resistencia mas baja
+
+circuito10 :: Circuito
+circuito10 = 
+  Serie
+    (Paralelo off cajaOn cajaOff on)
+    (Serie cajaOn cajaOn)
+-- Aca deberia devolver (Serie cajaOn cajaOn) que compara entre una seria y un paralelo
+
+
 -- TESTS
 
 testsInvertido :: Test
