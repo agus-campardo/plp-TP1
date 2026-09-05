@@ -96,15 +96,11 @@ hayCaminoIluminado =
     esCajaConductora 
     (\_ recCi _ recCd         -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
-      esCajaIluminada ce && (recCi || recCd) && esCajaIluminada cs)
+      ce == on && (recCi || recCd) && cs == on)
 
   where 
     esCajaConductora :: Caja -> Bool 
-    esCajaConductora caja = esCajaIluminada caja || caja == Nada
-
-
-esCajaIluminada :: Caja -> Bool 
-esCajaIluminada = (== on)
+    esCajaConductora caja = caja == on || caja == Nada
 
 
 -- 5: cantidadPrendidas
@@ -112,7 +108,7 @@ esCajaIluminada = (== on)
 cantidadPrendidas :: Circuito -> Int 
 cantidadPrendidas =
   foldCircuito
-    (\caja -> if esCajaIluminada caja then 1 else 0) 
+    (\caja -> if caja == on then 1 else 0) 
     (+)
     (\ce recCi recCd cs -> 
       cantidadPrendidasPorLado ce recCi + 
@@ -123,7 +119,6 @@ cantidadPrendidas =
       cantidadPrendidasPorLado :: Caja -> Int -> Int
       cantidadPrendidasPorLado caja rec =
         if caja == on then 1 + rec else rec 
-
 -- 6: cajasDeCircuito
 
 cajasDeCircuito :: Circuito -> [Caja]
