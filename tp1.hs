@@ -165,19 +165,19 @@ tienenLaMismaEstructura =
 
 -- 10: subCircuitoMásResistente
 resistenciaCircuito :: Circuito -> Float
-resistenciaCircuito = 
-  foldCircuito
-    (\caja -> if caja /= Nada then 1 else 0) 
-    (+)
-    (\ce recCi recCd cs -> 
-      cantidadPrendidasPorLado ce recCi + 
-      cantidadPrendidasPorLado cs recCd   
-    )
+resistenciaCircuito c = 
+  if cantidadTotales c == 0
+    then 0
+    else fromIntegral (cantidadPrendidas c) / fromIntegral (cantidadTotales c)
+  where
+    cantidadTotales :: Circuito -> Int
+    cantidadTotales = foldCircuito
+      (\caja -> if caja /= Nada then 1 else 0)
+      (+)
+      (\ce recCi recCd cs -> contarCaja ce + recCi + recCd + contarCaja cs)
 
-    where 
-      cantidadPrendidasPorLado :: Caja -> Float -> Float
-      cantidadPrendidasPorLado caja rec =
-        if caja /= Nada then 1 + rec else rec 
+    contarCaja :: Caja -> Int
+    contarCaja caja = if caja /= Nada then 1 else 0
 
 subCircuitoMásResistente :: Circuito -> Circuito
 subCircuitoMásResistente = recCircuito
