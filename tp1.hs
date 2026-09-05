@@ -441,7 +441,7 @@ circuito3 :: Circuito
 circuito3 = Paralelo on cajaNada cajaOff off 
 
 circuito4 :: Circuito
-ejemplo4 = Serie
+circuito4 = Serie
             ( Paralelo
                 on
                 (Paralelo off cajaNada cajaOn on)
@@ -450,8 +450,8 @@ ejemplo4 = Serie
             )
             cajaOn
 
-circuito4 :: Circuito
-ejemplo4_invertido = Serie
+circuito4_invertido :: Circuito
+circuito4_invertido = Serie
                       cajaOn
                       ( Paralelo
                           on
@@ -459,20 +459,6 @@ ejemplo4_invertido = Serie
                           (Paralelo on cajaOn cajaNada off)
                           on
                       )
-
-circuito5 :: Circuito
-circuito5 = Paralelo
-            off
-            (Serie
-              (Paralelo on cajaOn cajaNada off)
-              (Serie cajaOff (Paralelo Nada cajaOn cajaOff on))
-            )
-            (Serie
-              cajaNada
-              (Paralelo off cajaOff cajaOn Nada)
-            )
-            on
-              
 
 
 {-
