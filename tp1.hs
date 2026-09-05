@@ -96,7 +96,7 @@ hayCaminoIluminado =
     esCajaConductora 
     (\_ recCi _ recCd         -> recCi && recCd)
     (\ce ci recCi cd recCd cs -> 
-      ce == on && (recCi || recCd) && cs == on)
+      esCajaConductora ce && (recCi || recCd) && esCajaConductora cs)
 
   where 
     esCajaConductora :: Caja -> Bool 
