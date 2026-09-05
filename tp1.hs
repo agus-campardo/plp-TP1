@@ -165,7 +165,19 @@ tienenLaMismaEstructura =
 
 -- 10: subCircuitoMásResistente
 resistenciaCircuito :: Circuito -> Float
-resistenciaCircuito = undefined
+resistenciaCircuito = 
+  foldCircuito
+    (\caja -> if caja /= Nada then 1 else 0) 
+    (+)
+    (\ce recCi recCd cs -> 
+      cantidadPrendidasPorLado ce recCi + 
+      cantidadPrendidasPorLado cs recCd   
+    )
+
+    where 
+      cantidadPrendidasPorLado :: Caja -> Float -> Float
+      cantidadPrendidasPorLado caja rec =
+        if caja /= Nada then 1 + rec else rec 
 
 subCircuitoMásResistente :: Circuito -> Circuito
 subCircuitoMásResistente = recCircuito
