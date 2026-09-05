@@ -143,32 +143,7 @@ esCircuitoProlijo = recCircuito
         Serie _ _ -> False 
         _         -> recCi && recCd)
   (\_ _ recCi _ recCd _ -> recCi && recCd)
-
-{-
-TODO: BORRAR
--- 8: circuitoEmprolijado 
--- PREGUNTAR ¡!¡!¡!¡!
-
--- de clase del 28/6: hay que ordenar usando lógica pre-oreden. 
--- tirar todas las series la la izq 
--- (no se puede usar Paralelo ni modificar la estructura en si. se debe preservar 
--- el "camino" de las luces y el estado y cantindad de las bombillas en las cajas )
-
-circuitoEmprolijado :: Circuito -> Circuito
-circuitoEmprolijado c = 
-  if esCircuitoProlijo c 
-  then c 
-  else foldCircuito
-        (\caja -> Caja caja)
-        (\recCi recCd -> Serie recCd recCi) 
-        -- pero qué pasa si tengo 
-        -- Serie ci cd, donde ambos son Series?
-        -- o sea, Serie (Serie 1) (Serie 2)
-
-        -- cuando lo de vuelta no va a ser prolijo porque en 
-        -- la segunda posición aún voy a tener una Serie 😛
-        (\ce recCi recCd cs -> Paralelo ce recCi recCd cs) c
--}
+  
 
 -- 9: tienenLaMismaEstructura 
 {-
@@ -446,18 +421,7 @@ DEMOSTRACIÓN DEL LEMA:
 
 Hemos demostrado los tres casos del principio de inducción sobre circuitos (ↈ).
 
-Por lo tanto, ∀x :: Circuito. P(x) se cumple.
-
-
-
-
-
-    
-  
-
-
-
-                            
+Por lo tanto, ∀x :: Circuito. P(x) se cumple.                           
 --}
 
 
