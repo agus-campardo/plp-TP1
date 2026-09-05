@@ -265,7 +265,7 @@ data Circuito = Caja     Caja
 Sea P una propiedad sobre expresiones de tipo Circuito basta mostrar que vale: 
   ▷ ∀caja :: Caja. P(Caja caja)
   ▷ ∀ci :: Circuito. ∀cd :: Circuito. P(ci) ∧ P(cd), entonces P(Serie ci cd)
-  ▷ ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cd :: Caja. P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)
+  ▷ ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cs :: Caja. P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)
 Entonces, vale ∀x :: Circuito. P(x). 
 
 Queremos demostrar la siguiente propiedad: alternado . alternado = id
@@ -294,14 +294,15 @@ Siendo P(x): alternado(alternado x) = id x.
 
         Probemos  
           ▷ ∀b :: Bool. Q(Bombilla b) 
-            Por inducción sobre booleanos, basta probar que Q(Bombilla True) y Q(Bombilla False)
+            Por lema de generación sobre booleanos, b = True o b = False.
+            Basta probar que Q(Bombilla True) y Q(Bombilla False)
 
             - Q(Bombilla True): Caja (cajaAlternada (cajaAlternada (Bombilla True))) = id (Caja (Bombilla True))
 
               -- Caja (cajaAlternada (cajaAlternada (Bombilla True))) 
-                {CAB} = Caja (cajaAlternada (Bombilla not True)) 
-                {NT}  = Caja (cajaAlternada (Bombilla False)) 
-                {CAB} = Caja (Bombilla not False) 
+                {CAB} = Caja (cajaAlternada (Bombilla (not True))) 
+                {CAB} = Caja (Bombilla (not (not True)))) 
+                {NT}  = Caja (Bombilla (not False))
                 {NF}  = Caja (Bombilla True) 
                 {I}   = id (Caja (Bombilla True)) 
 
@@ -309,10 +310,10 @@ Siendo P(x): alternado(alternado x) = id x.
             
             - Q(Bombilla False): Caja (cajaAlternada (cajaAlternada (Bombilla False))) = id (Caja (Bombilla False))
 
-              -- Caja (cajaAlternada (cajaAlternada (Bombilla False))) 
-                {CAB} = Caja (cajaAlternada (Bombilla not False)) 
-                {NF}  = Caja (cajaAlternada (Bombilla True)) 
-                {CAB} = Caja (Bombilla not True) 
+             -- Caja (cajaAlternada (cajaAlternada (Bombilla False))) 
+                {CAB} = Caja (cajaAlternada (Bombilla (not False))) 
+                {CAB} = Caja (Bombilla (not (not False)))) 
+                {NF}  = Caja (Bombilla (not True))
                 {NT}  = Caja (Bombilla False) 
                 {I}   = id (Caja (Bombilla False)) 
 
@@ -330,25 +331,64 @@ Siendo P(x): alternado(alternado x) = id x.
 
   ▷ ∀ci :: Circuito. ∀cd :: Circuito. P(ci) ∧ P(cd), entonces P(Serie ci cd)
     P(Serie ci cd): alternado(alternado (Serie ci cd)) = id (Serie ci cd)
+    HI: P(ci) ∧ P(cd)
 
     - alternado(alternado (Serie ci cd))
       {AS} = alternado(Serie (alternado ci) (alternado cd)) 
       {AS} = Serie (alternado(alternado ci)) (alternado(alternado cd))
       {HI} = Serie (id ci) (id cd) 
+      {I}  = Serie ci (id cd) 
       {I}  = Serie ci cd 
       {I}  = id (Serie ci cd) 
 
   ▷ ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cd :: Caja. P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)
     P(Paralelo ce ci cd cs): alternado(alternado (Paralelo ce ci cd cs)) = id (Paralelo ce ci cd cs)
+    HI : P(ci) ∧ P(cd)
 
     - alternado(alternado (Paralelo ce ci cd cs))
       {AP} = alternado(Paralelo (cajaAlternada ce) (alternado ci) (alternado cd) (cajaAlternada cs))
-      {AP} = Paralelo (cajaAlternado(cajaAlternada ce)) (alternado(alternado ci)) (alternado(alternado cd)) (cajaAlternado(cajaAlternada cs))
-      {HI} = Paralelo (cajaAlternado(cajaAlternada ce)) (id ci) (id cd) (cajaAlternado(cajaAlternada cs))
-      {por haber probado Q(x) en inducción sobre cajas} 
-          = Paralelo (id ce) (id ci) (id cd) (id cs)
+      {AP} = Paralelo (cajaAlternada(cajaAlternada ce)) (alternado(alternado ci)) (alternado(alternado cd)) (cajaAlternada(cajaAlternada cs))
+      {HI} = Paralelo (cajaAlternada(cajaAlternada ce)) (id ci) (id cd) (cajaAlternada(cajaAlternada cs))
+      {LEMA} = Paralelo (id ce) (id ci) (id cd) (id cs)
+      {I}  = Paralelo ce (id ci) (id cd) (id cs)
+      {I}  = Paralelo ce  ci (id cd) (id cs)
+      {I}  = Paralelo ce  ci cd (id cs)
       {I}  = Paralelo ce ci cd cs 
       {I}  = id (Paralelo ce ci cd cs)
+
+
+Lema:  ∀ce :: Caja. cajaAlternada(cajaAlternada c) = id c
+      R(x): cajaAlternada(cajaAlternada c) = id c
+      Por inducción estructural sobre cajas, para probar R(x), basta prbar:
+      ▷ ∀b :: Bool. R(Bombilla b)
+      ▷ R(Nada)
+
+      ▷ ∀b :: Bool. R(Bombilla b)
+      Por lema de generación de booleanos, b = True o b = False. Luego para probar R(Bombilla b)
+      basta probar R(Bombilla True) y R(Bombilla False).
+        ▷ R(Bombilla True): cajaAlternada(cajaAlternada (Bombilla True)) = id (Bombilla True)
+        cajaAlternada(cajaAlternada (Bombilla True))
+        {CAB} = cajaAlternada (Bombilla (not True))
+        {CAB} = Bombilla (not (not True))
+        {NT}  = Bombilla (not False)
+        {NF}  = Bombilla True
+        {I}   = id (Bombilla True)
+
+        ▷ R(Bombilla False): cajaAlternada(cajaAlternada (Bombilla False)) = id (Bombilla False)
+        cajaAlternada(cajaAlternada (Bombilla False))
+        {CAB} = cajaAlternada (Bombilla (not False))
+        {CAB} = Bombilla (not (not False))
+        {NF}  = Bombilla (not True)
+        {NT}  = Bombilla False
+        {I}   = id (Bombilla False)
+
+      ▷ R(Nada): cajaAlternada(cajaAlternada Nada) = id Nada
+      cajaAlternada(cajaAlternada Nada)
+      {CAN} = cajaAlternada Nada 
+      {CAN} = Nada
+      {I}   = id Nada
+       
+
 
     
   
