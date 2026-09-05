@@ -47,17 +47,6 @@ cajaOn   = Caja on
 cajaOff  = Caja off
 cajaNada = Caja Nada
 
-{-
-comentarios y consideraciones del viernes 4/9: 
-  ▶ una caja vacia conduce 
-  ▶ "los bugs están en los casos más pequeños". 
-      3 <= cantidadTests <= 5 
-      ver de hacer uno por cada constructor? 
-  ▶ en el ej10: quiero que me de el resultado para todas las combinaciones de funciones posibles 
-    darle definicion a la funcion de resistencia
-
--}
-
 -- 1: recCircuito
 recCircuito :: (Caja -> b) ->                                           -- fCaja 
                (Circuito -> b -> Circuito -> b -> b) ->                 -- fSerie 
@@ -69,6 +58,7 @@ recCircuito fCaja fSerie fParalelo c = case c of
   Paralelo ce ci cd cs -> fParalelo ce ci (rec ci) cd (rec cd) cs 
 
   where rec = recCircuito fCaja fSerie fParalelo
+
 
 -- 2: foldCircuito
 
@@ -89,7 +79,6 @@ invertido = foldCircuito
 
 
 -- 4: hayCaminoIluminado
--- solo considera las cajas con bombillas prendidas 
 hayCaminoIluminado :: Circuito -> Bool 
 hayCaminoIluminado = 
   recCircuito 
@@ -104,7 +93,6 @@ hayCaminoIluminado =
 
 
 -- 5: cantidadPrendidas
-
 cantidadPrendidas :: Circuito -> Int 
 cantidadPrendidas =
   foldCircuito
@@ -119,8 +107,9 @@ cantidadPrendidas =
       cantidadPrendidasPorLado :: Caja -> Int -> Int
       cantidadPrendidasPorLado caja rec =
         if caja == on then 1 + rec else rec 
--- 6: cajasDeCircuito
 
+
+-- 6: cajasDeCircuito
 cajasDeCircuito :: Circuito -> [Caja]
 cajasDeCircuito = foldCircuito
   (\caja              -> [caja])
@@ -129,7 +118,6 @@ cajasDeCircuito = foldCircuito
 
 
 -- 7: esCircuitoProlijo
-
 esCircuitoProlijo :: Circuito -> Bool
 esCircuitoProlijo = recCircuito
   (const True)
@@ -163,6 +151,7 @@ tienenLaMismaEstructura =
                               _                   -> False 
     ) 
 
+
 -- 10: subCircuitoMásResistente
 resistenciaCircuito :: Circuito -> Float
 resistenciaCircuito c = 
@@ -188,6 +177,7 @@ subCircuitoMásResistente = recCircuito
       comparar :: Circuito -> Circuito -> Circuito 
       comparar c1 c2 = if resistenciaCircuito c1 >= resistenciaCircuito c2 then c1 else c2
 
+
 {-- OPCIÓN PARA TESTEAR
 subCircuitoMásResistente' :: (Circuito -> Float) -> Circuito -> Circuito
 subCircuitoMásResistente' f = recCircuito
@@ -201,6 +191,8 @@ subCircuitoMásResistente' f = recCircuito
 subCircuitoMásResistente :: Circuito -> Circuito
 subCircuitoMásResistente = subCircuitoMásResistente' resistenciaCircuito
 --}
+
+
 
 {-- 11: Demostrar: alternado . alternado = id
 
@@ -468,10 +460,4 @@ circuito4_invertido = Serie
 
 circuito5 :: Circuito
 circuito5 = Serie cajaOn (Serie cajaOff cajaOn)
-
-{-
-Eliminar 'esIluminado' del ejercicio 4/5 
-Hacer resistenciaCircuito de ejercicio 10
--}
-
 
