@@ -431,8 +431,17 @@ Hemos demostrado los tres casos del principio de inducción sobre circuitos (ↈ
 Por lo tanto, ∀x :: Circuito. P(x) se cumple.                           
 --}
 
+circuito1 :: Circuito
+circuito1 = cajaOn
 
-ejemplo1 = Serie
+circuito2 :: Circuito
+circuito2 = Serie cajaOn cajaOff
+
+circuito3 :: Circuito
+circuito3 = Paralelo on cajaNada cajaOff off 
+
+circuito4 :: Circuito
+ejemplo4 = Serie
             ( Paralelo
                 on
                 (Paralelo off cajaNada cajaOn on)
@@ -441,7 +450,8 @@ ejemplo1 = Serie
             )
             cajaOn
 
-ejemplo1_invertido = Serie
+circuito4 :: Circuito
+ejemplo4_invertido = Serie
                       cajaOn
                       ( Paralelo
                           on
@@ -450,16 +460,19 @@ ejemplo1_invertido = Serie
                           on
                       )
 
-ejemplo2 = Serie cajaOn (Serie cajaOff cajaOn)
-
-ejemplo3 = Serie
-            ( Paralelo
-                on
-                (Paralelo on cajaOn cajaOn on)
-                (Paralelo on cajaOn cajaOff on)
-                on
+circuito5 :: Circuito
+circuito5 = Paralelo
+            off
+            (Serie
+              (Paralelo on cajaOn cajaNada off)
+              (Serie cajaOff (Paralelo Nada cajaOn cajaOff on))
             )
-            cajaOn
+            (Serie
+              cajaNada
+              (Paralelo off cajaOff cajaOn Nada)
+            )
+            on
+              
 
 
 {-

@@ -50,6 +50,12 @@ testsCajasDeCircuito = TestList -- TODO: AGREGAR
   [ "La lista de cajas de un circuito con una única caja es la lista con esa caja"
     ~: cajasDeCircuito cajaOn
     ~?= [on]
+  , "Cajas (2)"
+    ~: cajasDeCircuito ejemplo1
+    ~?= [on, off, Nada, on, on, Nada, on, off, Nada, on, on]
+  , "Cajas (3)"
+    ~: cajasDeCircuito ejemplo3
+    ~?= [on, on, on, on, on, on, on, off, on, on, on]
   ]
 
 testsEsCircuitoProlijo :: Test
@@ -57,23 +63,25 @@ testsEsCircuitoProlijo = TestList -- TODO: AGREGAR
   [ "Una caja es prolija"
     ~: esCircuitoProlijo cajaOn
     ~?= True
+  , "Un circuito sin serie a la derecha"
+    ~: esCircuitoProlijo ejemplo1
+    ~?= True
+  , "Un circuito con serie a la derecha"
+    ~: esCircuitoProlijo ejemplo2
+    ~?= False
   ]
-
--- NOTA: para correr este test, cambiar la línea 18 del archivo tp1.hs de "show = showDeCircuito" a
-  -- "show = showDeCircuitoConEstructura".
-  -- De esa forma, podrán distinguir la estructura de los circuitos en serie.
-{-testsCircuitoEmprolijado :: Test
-testsCircuitoEmprolijado = TestList -- TODO: AGREGAR
-  [ "La versión emprolijada de una caja es la misma caja"
-    ~: circuitoEmprolijado cajaOn
-    ~?= cajaOn
-  ]
--}
 
 testsTienenLaMismaEstructura :: Test
 testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
-  [
-    
+  [ "Las cajas tienen la misma estructura"
+    ~: tienenLaMismaEstructura cajaOn cajaOff
+    ~?= True
+  , "Ambos circuitos tienen la misma estructura, más no así lo de adentro de las cajas"
+    ~: tienenLaMismaEstructura ejemplo1 ejemplo1_misma_estructura
+    ~?= True
+  , "En este caso, el inverso no tiene la misma estructura"
+    ~: tienenLaMismaEstructura ejemplo1 ejemplo1_invertido
+    ~?= False
   ]
 
 testsSubCircuitoMásResistente :: Test
