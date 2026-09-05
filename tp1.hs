@@ -491,3 +491,9 @@ ejemplo3 = Serie
             cajaOn
 
 
+{-
+Eliminar 'esIluminado' del ejercicio 4/5 
+Hacer resistenciaCircuito de ejercicio 10
+-}
+
+
