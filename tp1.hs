@@ -175,7 +175,7 @@ subCircuitoMásResistente = recCircuito
   (\ce ci recCi cd recCd cs -> comparar (comparar (comparar ci recCi) (comparar cd recCd)) (Paralelo ce ci cd cs))
     where
       comparar :: Circuito -> Circuito -> Circuito 
-      comparar c1 c2 = if resistenciaCircuito c1 >= resistenciaCircuito c2 then c1 else c2
+      comparar c1 c2 = if resistenciaCircuito c1 > resistenciaCircuito c2 then c1 else c2
 
 
 {-- OPCIÓN PARA TESTEAR
