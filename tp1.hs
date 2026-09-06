@@ -344,7 +344,7 @@ Por inducción sobre Circuitos, bastaría con demostrar (ↈ).
 
 
 ▷ CASO RECURSIVO: Paralelo
-    ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cd :: Caja. 
+    ∀ce :: Caja. ∀ci :: Circuito. ∀cd :: Circuito. ∀cs :: Caja. 
       P(ci) ∧ P(cd), entonces P(Paralelo ce ci cd cs)
 
     Hipótesis inductiva: 
