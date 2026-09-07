@@ -251,7 +251,7 @@ DEMO:
 
 Queremos demostrar la siguiente propiedad: alternado . alternado = id
 
-Por extensionalidad funcional, nos bastaría demostrar que:  
+Por extensionalidad funcional, esto vale si vale que:  
   ∀x :: Circuito. (alternado . alternado) x = id x
 
 Por {C}, esto es lo mismo que demostar que: 
@@ -423,3 +423,60 @@ Hemos demostrado los tres casos del principio de inducción sobre circuitos (ↈ
 Por lo tanto, ∀x :: Circuito. P(x) se cumple.                           
 --}
 
+
+
+
+
+{--
+▷ CASO BASE: Caja 
+  ∀caja :: Caja. P(Caja caja) ≡ alternado(alternado (Caja caja)) = id (Caja caja)
+
+      - alternado(alternado (Caja caja)) 
+        {AC} = alternado(Caja (cajaAlternada caja))
+        {AC} = Caja (cajaAlternada (cajaAlternada caja))
+
+        Sea data Caja = Bombilla Bool | Nada
+
+        Por lema de generación sobre cajas:
+        - caja = Bombilla b con b :: Bool
+        - caja = Nada
+        
+        Probemos  
+          ▷ CASO BOMBILLA:
+            ∀b :: Bool. Caja (cajaAlternada (cajaAlternada (Bombilla b)))
+            Por lema de generación sobre booleanos, b = True o b = False.
+            Basta probar que:            
+            - Caja (cajaAlternada (cajaAlternada (Bombilla True))) = id (Caja (Bombilla True))
+
+              -- Caja (cajaAlternada (cajaAlternada (Bombilla True))) 
+                {CAB} = Caja (cajaAlternada (Bombilla (not True))) 
+                {CAB} = Caja (Bombilla (not (not True)))) 
+                {NT}  = Caja (Bombilla (not False))
+                {NF}  = Caja (Bombilla True) 
+                {I}   = id (Caja (Bombilla True)) 
+
+                Que era lo que queríamos probar. 
+            
+            - Caja (cajaAlternada (cajaAlternada (Bombilla False))) = id (Caja (Bombilla False))
+
+             -- Caja (cajaAlternada (cajaAlternada (Bombilla False))) 
+                {CAB} = Caja (cajaAlternada (Bombilla (not False))) 
+                {CAB} = Caja (Bombilla (not (not False)))) 
+                {NF}  = Caja (Bombilla (not True))
+                {NT}  = Caja (Bombilla False) 
+                {I}   = id (Caja (Bombilla False)) 
+
+                Que era lo que queríamos probar. 
+            
+          ▷ CASO NADA: 
+            Caja (cajaAlternada (cajaAlternada Nada)) = id (Caja Nada)  
+
+            - Caja (cajaAlternada (cajaAlternada (Nada)))
+              {CAN} = Caja (cajaAlternada Nada)
+              {CAN} = Caja Nada          
+              {I}   = id (Caja Nada)
+
+              Que era lo que queríamos probar. 
+
+  Por lo tanto, P(Caja caja) queda demostrado. 
+--}
