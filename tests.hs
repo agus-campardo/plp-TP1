@@ -1,8 +1,7 @@
 import Test.HUnit
 import TP1
 
-
-
+-- CIRCUIUTOS PARA TESTEAR
 circuito1 :: Circuito
 circuito1 = cajaOn
 
@@ -83,7 +82,7 @@ circuito10 =
 -- TESTS
 
 testsInvertido :: Test
-testsInvertido = TestList -- TODO: AGREGAR
+testsInvertido = TestList  
   [ "Caja invertida (1)"
     ~: invertido cajaOn
     ~?= cajaOn
@@ -105,7 +104,7 @@ testsInvertido = TestList -- TODO: AGREGAR
   ]
 
 testsHayCaminoIluminado :: Test
-testsHayCaminoIluminado = TestList -- TODO: AGREGAR
+testsHayCaminoIluminado = TestList  
   [ "En una caja con bombilla encendida hay camino iluminado"
     ~: hayCaminoIluminado cajaOn
     ~?= True
@@ -121,7 +120,7 @@ testsHayCaminoIluminado = TestList -- TODO: AGREGAR
   ]
 
 testsCantidadPrendidas :: Test
-testsCantidadPrendidas = TestList -- TODO: AGREGAR
+testsCantidadPrendidas = TestList  
   [ "Cantidad prendidas en caja prendida es 1"
     ~: cantidadPrendidas cajaOn
     ~?= 1
@@ -137,7 +136,7 @@ testsCantidadPrendidas = TestList -- TODO: AGREGAR
   ]
 
 testsCajasDeCircuito :: Test
-testsCajasDeCircuito = TestList -- TODO: AGREGAR
+testsCajasDeCircuito = TestList  
   [ "La lista de cajas de un circuito con una única caja es la lista con esa caja"
     ~: cajasDeCircuito cajaOn
     ~?= [on]
@@ -153,7 +152,7 @@ testsCajasDeCircuito = TestList -- TODO: AGREGAR
   ]
 
 testsEsCircuitoProlijo :: Test
-testsEsCircuitoProlijo = TestList -- TODO: AGREGAR
+testsEsCircuitoProlijo = TestList  
   [ "Una caja es prolija"
     ~: esCircuitoProlijo cajaOn
     ~?= True
@@ -172,7 +171,7 @@ testsEsCircuitoProlijo = TestList -- TODO: AGREGAR
   ]
 
 testsTienenLaMismaEstructura :: Test
-testsTienenLaMismaEstructura = TestList -- TODO: AGREGAR
+testsTienenLaMismaEstructura = TestList  
   [ "Dos cajas tienen la misma estructura"
     ~: tienenLaMismaEstructura cajaOn cajaOff
     ~?= True
@@ -219,7 +218,6 @@ tests = TestList
   , TestLabel "cantidadPrendidas"        testsCantidadPrendidas
   , TestLabel "cajasDeCircuito"          testsCajasDeCircuito
   , TestLabel "esCircuitoProlijo"        testsEsCircuitoProlijo
-  --, TestLabel "circuitoEmprolijado"      testsCircuitoEmprolijado
   , TestLabel "tienenLaMismaEstructura"  testsTienenLaMismaEstructura
   , TestLabel "subCircuitoMásResistente" testsSubCircuitoMásResistente
   ]
